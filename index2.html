@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>By Fitness Chat IA</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #111; color: #fff; }
+    input, button { padding: 10px; font-size: 16px; }
+    #response { margin-top: 20px; background: #222; padding: 15px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h2>Chat IA By Fitness</h2>
+  <input id="messageInput" type="text" placeholder="Escribe tu mensaje aquí" />
+  <button onclick="sendMessage()">✈️</button>
+  <div id="response">Aquí verás la respuesta de la IA...</div>
+
+  <script>
+    async function sendMessage() {
+      const message = document.getElementById("messageInput").value;
+      const responseBox = document.getElementById("response");
+
+      responseBox.innerHTML = "Enviando...";
+
+      try {
+        const res = await fetch("https://us-central1-by-fitness-app.cloudfunctions.net/chatByFitness", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+        responseBox.innerHTML = `<strong>IA:</strong> ${data.response || "No hubo respuesta."}`;
+      } catch (err) {
+        responseBox.innerHTML = "⚠️ Error al generar respuesta de la IA";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
